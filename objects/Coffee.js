@@ -18,5 +18,16 @@ export default class Coffee extends Phaser.Physics.Arcade.Sprite {
         this.tirednessPlus = tirednessPlus
         this.scorePoints = scorePoints
         this.sound = sound
+        this.scene.time.addEvent({
+            delay: 200,
+            callback: () => {
+                if (this.tintTopLeft === 0xffffff) {
+                    this.tint = 0xaaaaaa
+                } else {
+                    this.tint = 0xffffff
+                }
+            },
+            loop: true
+        })
     }
 }

@@ -48,3 +48,18 @@ export async function getHighScores() {
     const querySnapshot = await getDocs(q)
     return querySnapshot.docs.map((doc) => doc.data())
 }
+export async function getMyHighScore() {
+    if (localStorage.getItem('twitchUsername')) {
+        const docRef = doc(
+            db,
+            'highscores',
+            localStorage.getItem('twitchUsername')
+        )
+        const docSnap = await getDoc(docRef)
+        if (docSnap.exists()) {
+            const data = docSnap.data()
+            return data.highscore
+        }
+    }
+    return 0
+}

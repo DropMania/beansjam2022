@@ -22,14 +22,16 @@ export default class Level extends Phaser.Scene {
         this.initiated = false
     }
     init({ username }) {
-        client.join(username)
+        if (username != '') {
+            client.join(username)
+        }
     }
     preload() {
-        // this.load.image('bohne', '/assets/img/bohne.png')
-        // this.load.image('km-mug', '/assets/img/km-mug.png')
-        // this.load.image('dmg-dose', '/assets/img/DropMonsterGaming.png')
-        for(let coffeinIndex in CoffeinObjects){
-            this.load.image(CoffeinObjects[coffeinIndex].img, `/assets/img/${CoffeinObjects[coffeinIndex].img}.png`)
+        for (let coffein of CoffeinObjects) {
+            this.load.image(coffein.img, `/assets/img/${coffein.img}.png`)
+        }
+        for (let obst of ObstObjetcs) {
+            this.load.image(obst.img, `/assets/img/${obst.img}.png`)
         }
         this.load.image('speechBubble', '/assets/img/SpeechBuble.png')
 
@@ -39,9 +41,7 @@ export default class Level extends Phaser.Scene {
             '/assets/img/player.json'
         )
         this.load.aseprite('npc', '/assets/img/npc.png', '/assets/img/npc.json')
-        this.load.image('bg', '/assets/img/bg.png')
-        this.load.image('obstacle1', '/assets/img/obstacle1.png')
-        this.load.image('obstacle2', '/assets/img/obstacle2.png')
+        this.load.image('bg', '/assets/img/GameBackground.png')
         this.load.audio('ost', '/assets/audio/ost.mp3')
         this.load.audio('bohne', '/assets/audio/bohne.mp3')
         this.load.audio('sip', '/assets/audio/sip.mp3')
@@ -155,7 +155,7 @@ export default class Level extends Phaser.Scene {
                 if (i % 2 === 0 && j % 2 === 0) {
                     let x = i * stepW
                     let y = j * stepH
-                    if (Math.random() > 0.25) {
+                    if (Math.random() > 0.1) {
                         let oAsset = this.ObstDropper.getRandomLoot()
 
                         let table = new Obstacle(this, x, y, oAsset.img)

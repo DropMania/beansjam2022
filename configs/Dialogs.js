@@ -1,16 +1,18 @@
 export default [
     'Hast du mal kurz \nne sekunde?',
     'Kannst du mal \nkurz...',
-    'Hast du schon \nmal von \n[DropManiaGaming] \ngehört?',
+    'Hast du schon \nmal von\nDropManiaGaming\ngehört?',
     {
-        text: 'Du bist doch \ndieser {NAME}',
-        replacements: [{
-            type: 'localstorage',
-            type_config: {
-                storage_var: 'twitchUsername'
-            },
-            replaceText: '{NAME}'
-        }]
+        text: 'Du bist doch \ndieser \n{NAME}',
+        replacements: [
+            {
+                type: 'localstorage',
+                type_config: {
+                    storage_var: 'twitchUsername'
+                },
+                replaceText: '{NAME}'
+            }
+        ]
     },
     'ICH BRAUCHE \nKAFFEE?!?!',
     'Pog',

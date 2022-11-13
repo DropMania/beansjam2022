@@ -20,12 +20,12 @@ export default class UIScene extends Phaser.Scene {
             30,
             'barEmpty'
         )
-        this.scoreText = this.add.text(30, 30, `Score: 0`)
-        this.highScoresListText = this.add.text(
-            this.game.config.width - 120,
-            30,
-            'HighScores:'
-        )
+        this.scoreText = this.add.text(30, 30, `Score: 0`, {
+            fontSize: '40px',
+            stroke: '#000000',
+            strokeThickness: 6
+        })
+
         this.barEmpty.scale = 10
         this.barFull = this.add.image(this.game.config.width / 2, 30, 'barFull')
         this.barFull.scale = 10
@@ -39,6 +39,12 @@ export default class UIScene extends Phaser.Scene {
             )
         })
 
+        this.add.text(575, 17, `Wach-Zeit`, {
+            fontSize: '20px',
+            stroke: '#000000',
+            strokeThickness: 6
+        })
+
         this.worldScene.events.on('updateHighscore', (addValue = 1) => {
             this.highscore += addValue
             this.scoreText.setText(`Score: ${this.highscore}`)
@@ -50,14 +56,7 @@ export default class UIScene extends Phaser.Scene {
         })
 
         this.uiSceneScene.events.on('saveHightScore', () => {
-            this.highScoresList.push(this.highscore)
             setEntry(this.highscore)
-            let scoreString = 'HighScores:'
-
-            for (var i = 0; i < this.highScoresList.length; i++) {
-                scoreString += `\nYou:${this.highScoresList[i]}`
-            }
-            this.highScoresListText.setText(scoreString)
         })
     }
 }
