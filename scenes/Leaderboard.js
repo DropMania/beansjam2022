@@ -19,6 +19,7 @@ export default class Leaderboard extends Phaser.Scene {
         })
         back_btn.on('pointerdown', () => {
             this.sound.play('btn')
+            this.scene.get('UIScene').events.emit('resetHighScore')
             this.scene.start('StartMenu')
         })
         this.add.text(100, 150, 'Leaderboard', {
