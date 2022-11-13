@@ -8,8 +8,8 @@ export default class UIScene extends Phaser.Scene {
         this.highScoresList = []
     }
     preload() {
-        this.load.image('barFull', '/assets/img/bar_full.png')
-        this.load.image('barEmpty', '/assets/img/bar_empty.png')
+        this.load.image('barFull', 'assets/img/bar_full.png')
+        this.load.image('barEmpty', 'assets/img/bar_empty.png')
     }
     create() {
         this.scene.setVisible(false, 'UIScene')

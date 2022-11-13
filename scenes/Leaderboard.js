@@ -5,10 +5,7 @@ export default class Leaderboard extends Phaser.Scene {
         super({ key: 'Leaderboard' })
         this.game = game
     }
-    preload() {
-        this.load.image('back-btn-down', '/assets/img/Back-button-down.png')
-        this.load.image('back-btn-up', '/assets/img/Back-button-up.png')
-    }
+    preload() {}
     create() {
         this.add.image(0, 0, 'startbg').setOrigin(0, 0)
 

@@ -3,6 +3,8 @@ import UIScene from './scenes/UIScene.js'
 import GameOver from './scenes/GameOver.js'
 import StartMenu from './scenes/StartMenu.js'
 import Leaderboard from './scenes/Leaderboard.js'
+import Loading from './scenes/Loading.js'
+import LoadingText from './scenes/LoadingText.js'
 
 new Phaser.Game({
     type: Phaser.AUTO,
@@ -29,5 +31,13 @@ new Phaser.Game({
         width: 1280,
         height: 720
     },
-    scene: [StartMenu, World, GameOver, Leaderboard, UIScene]
+    scene: [
+        LoadingText,
+        StartMenu,
+        World,
+        GameOver,
+        Leaderboard,
+        UIScene,
+        Loading
+    ]
 })

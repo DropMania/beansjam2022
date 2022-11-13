@@ -26,26 +26,7 @@ export default class Level extends Phaser.Scene {
             client.join(username)
         }
     }
-    preload() {
-        for (let coffein of CoffeinObjects) {
-            this.load.image(coffein.img, `/assets/img/${coffein.img}.png`)
-        }
-        for (let obst of ObstObjetcs) {
-            this.load.image(obst.img, `/assets/img/${obst.img}.png`)
-        }
-        this.load.image('speechBubble', '/assets/img/SpeechBuble.png')
-
-        this.load.aseprite(
-            'player',
-            '/assets/img/player.png',
-            '/assets/img/player.json'
-        )
-        this.load.aseprite('npc', '/assets/img/npc.png', '/assets/img/npc.json')
-        this.load.image('bg', '/assets/img/GameBackground.png')
-        this.load.audio('ost', '/assets/audio/ost.mp3')
-        this.load.audio('bohne', '/assets/audio/bohne.mp3')
-        this.load.audio('sip', '/assets/audio/sip.mp3')
-    }
+    preload() {}
     create() {
         this.song = this.sound.add('ost', { loop: true, volume: 0.3 })
         this.song.play()

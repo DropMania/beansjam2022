@@ -3,15 +3,7 @@ export default class StartMenu extends Phaser.Scene {
         super({ key: 'StartMenu' })
         this.game = game
     }
-    preload() {
-        this.load.image('StartMenuBackground', '/assets/img/startbg_text.png')
-        this.load.image('startbg', '/assets/img/startscreembg.png')
-        this.load.image('lb-btn-down', '/assets/img/Leaderboad-button-down.png')
-        this.load.image('lb-btn-up', '/assets/img/Leaderboard-button-up.png')
-        this.load.image('start-btn-down', '/assets/img/Start-button-down.png')
-        this.load.image('start-btn-up', '/assets/img/Start-button-up.png')
-        this.load.audio('btn', '/assets/audio/btn.mp3')
-    }
+    preload() {}
     create() {
         this.add.image(0, 0, 'startbg').setOrigin(0, 0)
         this.add.image(0, 0, 'StartMenuBackground').setOrigin(0, 0)

@@ -5,9 +5,7 @@ export default class GameOver extends Phaser.Scene {
         super({ key: 'GameOver' })
         this.game = game
     }
-    preload() {
-        this.load.image('GameOverBG', '/assets/img/GameOver.png')
-    }
+    preload() {}
     create() {
         this.add.image(0, 0, 'GameOverBG').setOrigin(0, 0)
         getMyHighScore().then((highScore) => {
