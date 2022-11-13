@@ -1,5 +1,7 @@
 import SpeechBubble from './SpeechBubble.js'
 export default class NPC extends Phaser.Physics.Arcade.Sprite {
+
+    speechBubbleOffsetY = 45
     constructor(scene, x, y, texture, name) {
         super(scene, x, y, texture)
         this.scene = scene
@@ -19,14 +21,14 @@ export default class NPC extends Phaser.Physics.Arcade.Sprite {
             fontSize: '16px',
             fill: '#000'
         })
-        this.speechBubble = new SpeechBubble(scene, x, y - 35)
+        this.speechBubble = new SpeechBubble(scene, x, y - this.speechBubbleOffsetY)
         this.speechBubble.visible = false
     }
     update() {
         this.nameText.x = this.x - this.nameText.width / 2
         this.nameText.y = this.y - 30
         this.speechBubble.x = this.x
-        this.speechBubble.y = this.y - 35
+        this.speechBubble.y = this.y - this.speechBubbleOffsetY
         this.speechBubble.updateSpeechText(
             this.speechBubble.x,
             this.speechBubble.y,

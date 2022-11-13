@@ -25,9 +25,12 @@ export default class Level extends Phaser.Scene {
         client.join(username)
     }
     preload() {
-        this.load.image('bohne', '/assets/img/bohne.png')
-        this.load.image('km-mug', '/assets/img/km-mug.png')
-        this.load.image('dmg-dose', '/assets/img/DropMonsterGaming.png')
+        // this.load.image('bohne', '/assets/img/bohne.png')
+        // this.load.image('km-mug', '/assets/img/km-mug.png')
+        // this.load.image('dmg-dose', '/assets/img/DropMonsterGaming.png')
+        for(let coffeinIndex in CoffeinObjects){
+            this.load.image(CoffeinObjects[coffeinIndex].img, `/assets/img/${CoffeinObjects[coffeinIndex].img}.png`)
+        }
         this.load.image('speechBubble', '/assets/img/SpeechBuble.png')
 
         this.load.aseprite(
@@ -118,7 +121,6 @@ export default class Level extends Phaser.Scene {
         let x = Math.floor(Math.random() * this.game.config.width)
         let y = Math.floor(Math.random() * this.game.config.height)
         let oAsset = this.CoffeinDropper.getRandomLoot()
-
         let bohne = new Coffee(
             this,
             x,

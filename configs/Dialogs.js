@@ -1,17 +1,27 @@
 export default [
-    'Hast du mal kurz ne sekunde?',
-    'Kannst du mal kurz...',
-    'Hast du schon mal von [DropManiaGaming] gehört?',
-    'Du bist doch dieser {NAME}',
-    'ICH BRAUCHE KAFFEE?!?!',
+    'Hast du mal kurz \nne sekunde?',
+    'Kannst du mal \nkurz...',
+    'Hast du schon \nmal von \n[DropManiaGaming] \ngehört?',
+    {
+        text: 'Du bist doch \ndieser {NAME}',
+        replacements: [{
+            type: 'localstorage',
+            type_config: {
+                storage_var: 'twitchUsername'
+            },
+            replaceText: '{NAME}'
+        }]
+    },
+    'ICH BRAUCHE \nKAFFEE?!?!',
     'Pog',
-    'Wusstest du das dein Twitch-Chat mit [!crjoin] hier auch rumlaufen kann?',
-    'Es ist Zeit für ein D-D-DUELL',
-    'Du hast mir in die Augen geschaut nun greif ich dich an! HAAA',
-    'Ich habe seit 2846 Stunden nicht mehr geschlafen! Ja mir geht es gut! Sicher. Sicher',
-    'ZzzZZzzZZzzZzZZzz',
-    'Ich muss arbeiten lass mich in Ruhe',
-    'Diese Game-Jams sind schon interessant, hmmmm',
-    'DU MUSST WACH BLEIBEN!',
-    'Peak Digga'
+    'Wusstest du das \ndein Twitch-Chat \nmit [!crjoin] hier \nauch rumlaufen \nkann?',
+    'Es ist Zeit für \nein D-D-DUELL',
+    'Du hast mir in \ndie Augen geschaut \nnun greif ich dich \nan! HAAA',
+    'Ich habe seit \n2846h nicht \nmehr geschlafen!',
+    'ZzzZZzzZZzzZz\nZZzz',
+    'Ich muss arbeiten \nlass mich in Ruhe',
+    'Diese Game-Jams \nsind schon \ninteressant, hmmmm',
+    'DU. \nMUSST. \nWACH. \nBLEIBEN.',
+    'Peak Digga',
+    'Wir müssen wach \nbleiben'
 ]
