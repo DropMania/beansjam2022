@@ -13,7 +13,9 @@ export default class GameOver extends Phaser.Scene {
         spaceBar.on('up', () => {
             this.scene.get('UIScene').events.emit('saveHightScore')
             this.scene.get('UIScene').events.emit('resetHighScore')
-            this.scene.start('World')
+            this.scene.start('World', {
+                username: localStorage.getItem('twitchUsername')
+            })
         })
     }
 }

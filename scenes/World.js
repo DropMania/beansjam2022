@@ -1,9 +1,15 @@
 import Player from '../objects/Player.js'
 import Coffee from '../objects/Coffee.js'
 import Obstacle from '../objects/Obstacle.js'
+import NPC from '../objects/NPC.js'
+import CoffeinObjects from '../configs/CoffeinObjects.js'
+import ObstObjetcs from '../configs/ObstObjetcs.js'
+import Dropper from '../factories/Dropper.js'
+import DialogProvider from '../factories/DialogProvider.js'
+import Names from '../configs/Names.js'
 
 const client = new tmi.Client({
-    channels: ['dropmaniagaming','mrbartagam']
+    debug: true
 })
 
 client.connect()
@@ -13,22 +19,37 @@ export default class Level extends Phaser.Scene {
         super()
         this.game = game
         Phaser.Scene.call(this, { key: 'World' })
-        
+        this.initiated = false
+    }
+    init({ username }) {
+        client.join(username)
     }
     preload() {
         this.load.image('bohne', '/assets/img/bohne.png')
+        this.load.image('km-mug', '/assets/img/km-mug.png')
+        this.load.image('dmg-dose', '/assets/img/DropMonsterGaming.png')
+        this.load.image('speechBubble', '/assets/img/SpeechBuble.png')
+
         this.load.aseprite(
             'player',
             '/assets/img/player.png',
             '/assets/img/player.json'
         )
+        this.load.aseprite('npc', '/assets/img/npc.png', '/assets/img/npc.json')
         this.load.image('bg', '/assets/img/bg.png')
-        this.load.image('table1', '/assets/img/table1.png')
+        this.load.image('obstacle1', '/assets/img/obstacle1.png')
+        this.load.image('obstacle2', '/assets/img/obstacle2.png')
+        this.load.audio('ost', '/assets/audio/ost.mp3')
+        this.load.audio('bohne', '/assets/audio/bohne.mp3')
+        this.load.audio('sip', '/assets/audio/sip.mp3')
     }
     create() {
+        this.song = this.sound.add('ost', { loop: true, volume: 0.3 })
+        this.song.play()
 
-        // this.uiSceneScene = this.scene.get('UIScene')
-        // this.uiSceneScene.scene.setActive(true)
+        this.CoffeinDropper = new Dropper(CoffeinObjects)
+        this.ObstDropper = new Dropper(ObstObjetcs)
+        this.DialogProvider = new DialogProvider()
         this.keys = this.input.keyboard.addKeys({
             left: Phaser.Input.Keyboard.KeyCodes.A,
             right: Phaser.Input.Keyboard.KeyCodes.D,
@@ -43,6 +64,8 @@ export default class Level extends Phaser.Scene {
             this.game.config.height / 2,
             'player'
         )
+        this.npcs = []
+        this.obstacles = []
         this.physics.world.setBounds(
             0,
             0,
@@ -62,6 +85,9 @@ export default class Level extends Phaser.Scene {
         for (let i = 0; i < 10; i++) {
             this.generateCoffee()
         }
+        for (let i = 0; i < 25; i++) {
+            this.generateNPC()
+        }
         this.time.addEvent({
             delay: 5000,
             callback: () => {
@@ -69,46 +95,114 @@ export default class Level extends Phaser.Scene {
             },
             loop: true
         })
-        client.on('message', (channel, tags, message, self) => {
-            if (message === '!coffee') {
-                for (let i = 0; i < 100; i++) {
-                    this.generateCoffee()
+        this.time.addEvent({
+            delay: 10000,
+            callback: () => {
+                for (let i = 0; i < 5; i++) {
+                    this.generateNPC()
                 }
-            }
+            },
+            loop: true
         })
+        if (!this.initiated) {
+            client.on('message', (channel, tags, message, self) => {
+                if (message === '!crjoin') {
+                    console.log('join', tags.username)
+                    this.generateNPC(tags['display-name'])
+                }
+            })
+            this.initiated = true
+        }
     }
     generateCoffee() {
         let x = Math.floor(Math.random() * this.game.config.width)
         let y = Math.floor(Math.random() * this.game.config.height)
-        let bohne = new Coffee(this, x, y, 'bohne')
+        let oAsset = this.CoffeinDropper.getRandomLoot()
+
+        let bohne = new Coffee(
+            this,
+            x,
+            y,
+            oAsset.img,
+            oAsset.scale,
+            oAsset.tirednessPlus,
+            oAsset.scorePoints,
+            oAsset.sound
+        )
         let collider = this.physics.add.collider(this.player, bohne, () => {
-            this.player.tiredness += 5
+            this.player.tiredness += bohne.tirednessPlus
             if (this.player.tiredness > 30) {
                 this.player.tiredness = 30
             }
 
-            this.events.emit(
-                'updateTiredness',
-                this.player.tiredness,
-            )
-            this.events.emit(
-                'updateHighscore',
-                bohne.baseValue,
-            )
+            this.events.emit('updateTiredness', this.player.tiredness)
+            this.events.emit('updateHighscore', bohne.scorePoints)
+            this.sound.play(bohne.sound)
 
             bohne.destroy()
             collider.destroy()
         })
     }
     generateObstacles() {
-        for (let i = 0; i < 100; i++) {
-            let x = Math.floor(Math.random() * this.game.config.width)
-            let y = Math.floor(Math.random() * this.game.config.height)
-            let obstacle = new Obstacle(this, x, y, 'table1')
-            let collider = this.physics.add.collider(this.player, obstacle)
+        let w = this.game.config.width
+        let h = this.game.config.height
+        let stepW = 32
+        let stepH = 24
+        for (let i = 0; i < w / stepW; i++) {
+            for (let j = 0; j < h / stepH; j++) {
+                if (i % 2 === 0 && j % 2 === 0) {
+                    let x = i * stepW
+                    let y = j * stepH
+                    if (Math.random() > 0.25) {
+                        let oAsset = this.ObstDropper.getRandomLoot()
+
+                        let table = new Obstacle(this, x, y, oAsset.img)
+                        this.physics.add.collider(this.player, table)
+                        this.obstacles.push(table)
+                    }
+                }
+            }
         }
+    }
+    generateNPC(name) {
+        if (!name) {
+            name = Names[Math.floor(Math.random() * Names.length)]
+        }
+        let x = Math.floor(Math.random() * this.game.config.width)
+        let y = Math.floor(Math.random() * this.game.config.height)
+        let npc = new NPC(this, x, y, 'npc', name)
+        for (let obstacle of this.obstacles) {
+            this.physics.add.collider(npc, obstacle)
+        }
+        this.physics.add.collider(this.player, npc, () => {
+            if (!this.player.cooldown) {
+                this.player.blocked = true
+                this.player.body.setVelocity(0, 0)
+                npc.speed = 0
+                npc.speechBubble.visible = true
+                this.time.addEvent({
+                    delay: 2000,
+                    callback: () => {
+                        this.player.blocked = false
+                        npc.speed = 60
+                        npc.speechBubble.visible = false
+                        this.player.cooldown = true
+                        this.time.addEvent({
+                            delay: 1000,
+                            callback: () => {
+                                this.player.cooldown = false
+                            }
+                        })
+                    }
+                })
+            }
+        })
+        this.npcs.push(npc)
     }
     update() {
         this.player.update()
+        for (let npc of this.npcs) {
+            npc.update()
+        }
     }
 }
